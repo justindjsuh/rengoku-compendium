@@ -1,3 +1,45 @@
 .container {
   display: flex;
 }
+
+.dashContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 2rem;
+  background-color: #202020;
+}
+
+.dashHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashHeader h1 {
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.dashHeader img {
+  border-radius: 50%;
+}
+
+.timeContainer {
+  background-color: #161616;
+  border-radius: 20px;
+  padding: 1rem;
+}
+
+.membersContainer {
+  background-color: #161616;
+  border-radius: 20px;
+  padding: 1rem;
+}
+
+.eventsContainer {
+  background-color: #161616;
+  border-radius: 20px;
+  padding: 1rem;
+}

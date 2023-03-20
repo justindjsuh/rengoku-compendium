@@ -1,8 +1,4 @@
-import {
-  useSupabaseClient,
-  useSession,
-  useUser,
-} from "@supabase/auth-helpers-react";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -21,7 +17,6 @@ export default function Signup() {
   const [errorState, setErrorState] = useState<boolean>(false);
 
   const supabase = useSupabaseClient();
-  const user = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

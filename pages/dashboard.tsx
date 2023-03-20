@@ -6,14 +6,14 @@ import Image from "next/image";
 import Link from "next/link";
 import SideMenu from "@/comps/SideMenu";
 
-export default function Dashboard() {
+export default function Dashboard({ data }: any) {
+  const character = data.CharacterData;
   const [profile, setProfile] = useState<{ username: string } | null>({
     username: "",
   });
   const user = useUser();
   const router = useRouter();
   const supabase = useSupabaseClient();
-
   const getProfile = useCallback(async () => {
     const { data, error } = await supabase
       .from("users")
@@ -25,7 +25,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     if (!user) router.push("/");
-    getProfile();
+    if (user) getProfile();
   }, [getProfile, router, user]);
 
   return (
@@ -41,17 +41,31 @@ export default function Dashboard() {
             height={60}
           />
         </div>
-        <div className={styles.avatarContainer}></div>
-        <div className={styles.rightContainer}>
-          <div className={styles.timeContainer}>
-            <p>Time until reset</p>
-            <p>Time until weekly reset</p>
+        <div className={styles.dashDetails}>
+          <div className={styles.avatarContainer}>
+            <Image
+              src={character.CharacterImageURL}
+              alt="character avatar"
+              width={150}
+              height={150}
+            />
+            <p className={styles.avatarName}>{character.Name}</p>
+            <p>
+              Level {character.Level} ({character.EXPPercent}
+              %)
+            </p>
+            <p>Class: {character.Class}</p>
+            <p>Rank: {character.ClassRank}</p>
+            <p>Legion: {character.LegionLevel}</p>
           </div>
-          <div className={styles.membersContainer}>
-            <p>Guild Members</p>
-          </div>
-          <div className={styles.eventsContainer}>
-            <p>Upcoming Events</p>
+          <div className={styles.rightContainer}>
+            <div className={styles.timeContainer}>
+              <p>Time until reset</p>
+              <p>Time until weekly reset</p>
+            </div>
+            <div className={styles.eventsContainer}>
+              <p>Upcoming Events</p>
+            </div>
           </div>
         </div>
       </div>
@@ -59,9 +73,10 @@ export default function Dashboard() {
   );
 }
 
-// export async function getServerSideProps() {
-//     const res = await fetch('')
-//     const data = await res.json();
-
-//     return {props: {data}}
-// }
+export async function getServerSideProps() {
+  const res = await fetch(
+    "https://api.maplestory.gg/v2/public/character/gms/Murkuro"
+  );
+  const data = await res.json();
+  return { props: { data } };
+}

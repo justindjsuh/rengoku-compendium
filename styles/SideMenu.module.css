@@ -15,6 +15,7 @@
   padding: 0.6rem;
   border-radius: 10px;
   cursor: pointer;
+  color: #adadad;
 }
 
 .navItem:hover {
@@ -24,6 +25,17 @@
 
 .navItem a {
   font-size: 16px;
+}
+
+.navItem button {
+  background-color: transparent;
+  outline: none;
+  font-size: 16px;
+  border: none;
+  color: #adadad;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  cursor: pointer;
 }
 
 .sideHeader {

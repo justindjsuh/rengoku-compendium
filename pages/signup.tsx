@@ -6,6 +6,7 @@ import styles from "@/styles/Signup.module.css";
 import React, { useState } from "react";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
+import { useEffect } from "react";
 
 export default function Signup() {
   const [email, setEmail] = useState<string>("");
@@ -92,57 +93,57 @@ export default function Signup() {
     }
   };
 
-  if (!user) {
-    return (
-      <>
-        <Head>
-          <title>Rengoku Compendium | Sign Up</title>
-        </Head>
-        <main className={styles.main}>
-          <div className={styles.header}>
-            <Image src="/logo.png" alt="fire logo" width={50} height={65} />
-            <h1>Rengoku Compendium</h1>
+  useEffect(() => {
+    if (user) router.push("/dashboard");
+  });
+
+  return (
+    <>
+      <Head>
+        <title>Rengoku Compendium | Sign Up</title>
+      </Head>
+      <main className={styles.main}>
+        <div className={styles.header}>
+          <Image src="/logo.png" alt="fire logo" width={50} height={65} />
+          <h1>Rengoku Compendium</h1>
+        </div>
+        <div className={styles.login_container}>
+          <h2>Create your account</h2>
+          <form className={styles.login_form} onSubmit={handleSubmit}>
+            <input
+              type="text"
+              placeholder="Email"
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Username"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="Discord"
+              onChange={(e) => setDiscord(e.target.value)}
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button>Create Account</button>
+          </form>
+          {submittedState && (
+            <p>Please check your email for a verification link!</p>
+          )}
+          {usernameTaken && <p>Username is already in use!</p>}
+          {emailTaken && <p>Email is already in use!</p>}
+          {errorState && <p>Something went wrong!</p>}
+          <div className={styles.navigator}>
+            <p>Already have an account?</p>
+            <Link href="/">Sign In</Link>
           </div>
-          <div className={styles.login_container}>
-            <h2>Create your account</h2>
-            <form className={styles.login_form} onSubmit={handleSubmit}>
-              <input
-                type="text"
-                placeholder="Email"
-                onChange={(e) => setEmail(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Username"
-                onChange={(e) => setUsername(e.target.value)}
-              />
-              <input
-                type="text"
-                placeholder="Discord"
-                onChange={(e) => setDiscord(e.target.value)}
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <button>Create Account</button>
-            </form>
-            {submittedState && (
-              <p>Please check your email for a verification link!</p>
-            )}
-            {usernameTaken && <p>Username is already in use!</p>}
-            {emailTaken && <p>Email is already in use!</p>}
-            {errorState && <p>Something went wrong!</p>}
-            <div className={styles.navigator}>
-              <p>Already have an account?</p>
-              <Link href="/">Sign In</Link>
-            </div>
-          </div>
-        </main>
-      </>
-    );
-  } else {
-    router.push("/dashboard");
-  }
+        </div>
+      </main>
+    </>
+  );
 }

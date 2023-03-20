@@ -2,7 +2,7 @@ import styles from "@/styles/SideMenu.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import {
   faAddressBook,
   faCalendar,
@@ -15,9 +15,20 @@ import {
   faRightFromBracket,
   faSackDollar,
 } from "@fortawesome/free-solid-svg-icons";
+import { useSupabaseClient } from "@supabase/auth-helpers-react";
 
 export default function SideMenu() {
+  const supabase = useSupabaseClient();
+  const router = useRouter();
   const route = useRouter().pathname;
+  const signout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw error;
+    } else {
+      router.push("/");
+    }
+  };
   return (
     <div className={styles.sideMenu}>
       <div className={styles.sideHeader}>
@@ -115,9 +126,7 @@ export default function SideMenu() {
             icon={faRightFromBracket}
             style={{ color: "#adadad" }}
           />
-          <Link href="/settings">Log out</Link>
-
-          {/* <button>Log Out</button> */}
+          <button onClick={signout}>Log Out</button>
         </div>
       </div>
     </div>

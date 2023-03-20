@@ -14,6 +14,7 @@ export default function Home() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [loginState, setLoginState] = useState<string>("");
+  const [loadingState, setLoadingState] = useState<boolean>(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,6 +25,7 @@ export default function Home() {
     });
 
     if (data.user) {
+      setLoadingState(true);
       router.push("/dashboard");
     } else {
       setLoginState("FAILED");
@@ -60,7 +62,9 @@ export default function Home() {
               placeholder="Password"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <button>Sign In</button>
+            <button disabled={loadingState}>
+              {loadingState ? "Loading..." : "Sign In"}
+            </button>
           </form>
           {loginState === "FAILED" && <p>Email or password is incorrect.</p>}
           <div className={styles.navigator}>

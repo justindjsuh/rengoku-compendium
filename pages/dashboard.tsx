@@ -55,7 +55,12 @@ export default function Dashboard({ data }: any) {
               %)
             </p>
             <p>Class: {character.Class}</p>
-            <p>Rank: {character.ClassRank}</p>
+            <p>
+              {character.Class} Rank {character.ClassRank}
+            </p>
+            <p>
+              {character.Server} Rank {character.ServerClassRanking}
+            </p>
             <p>Legion: {character.LegionLevel}</p>
           </div>
           <div className={styles.rightContainer}>

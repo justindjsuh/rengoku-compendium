@@ -1,10 +1,11 @@
-import { useSupabaseClient } from "@supabase/auth-helpers-react";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/styles/Signup.module.css";
 import React, { useState } from "react";
 import { PostgrestSingleResponse } from "@supabase/supabase-js";
+import { useRouter } from "next/router";
 
 export default function Signup() {
   const [email, setEmail] = useState<string>("");
@@ -17,9 +18,13 @@ export default function Signup() {
   const [errorState, setErrorState] = useState<boolean>(false);
 
   const supabase = useSupabaseClient();
+  const router = useRouter();
+  const user = useUser();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setEmailTaken(false);
+    setUsernameTaken(false);
     const usernames: PostgrestSingleResponse<{ username: string }[]> =
       await supabase.from("users").select("username");
     const emails: PostgrestSingleResponse<{ email: string }[]> = await supabase
@@ -59,11 +64,7 @@ export default function Signup() {
       if (error) {
         setErrorState(true);
       } else {
-        console.log("ID", data.user?.id);
-        console.log("EMAIL", data.user?.email);
-        console.log("USERNAME", username);
-        console.log("DISCORD", discord);
-        const { error } = await supabase.from("user").insert({
+        const { error } = await supabase.from("users").insert({
           auth_id: data.user?.id,
           email: data.user?.email,
           username,
@@ -91,53 +92,57 @@ export default function Signup() {
     }
   };
 
-  return (
-    <>
-      <Head>
-        <title>Rengoku Compendium | Sign Up</title>
-      </Head>
-      <main className={styles.main}>
-        <div className={styles.header}>
-          <Image src="/logo.png" alt="fire logo" width={50} height={65} />
-          <h1>Rengoku Compendium</h1>
-        </div>
-        <div className={styles.login_container}>
-          <h2>Create your account</h2>
-          <form className={styles.login_form} onSubmit={handleSubmit}>
-            <input
-              type="text"
-              placeholder="Email"
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Username"
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <input
-              type="text"
-              placeholder="Discord"
-              onChange={(e) => setDiscord(e.target.value)}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <button>Create Account</button>
-          </form>
-          {submittedState && (
-            <p>Please check your email for a verification link!</p>
-          )}
-          {usernameTaken && <p>Username is already in use!</p>}
-          {emailTaken && <p>Email is already in use!</p>}
-          {errorState && <p>Something went wrong!</p>}
-          <div className={styles.navigator}>
-            <p>Already have an account?</p>
-            <Link href="/">Sign In</Link>
+  if (!user) {
+    return (
+      <>
+        <Head>
+          <title>Rengoku Compendium | Sign Up</title>
+        </Head>
+        <main className={styles.main}>
+          <div className={styles.header}>
+            <Image src="/logo.png" alt="fire logo" width={50} height={65} />
+            <h1>Rengoku Compendium</h1>
           </div>
-        </div>
-      </main>
-    </>
-  );
+          <div className={styles.login_container}>
+            <h2>Create your account</h2>
+            <form className={styles.login_form} onSubmit={handleSubmit}>
+              <input
+                type="text"
+                placeholder="Email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Username"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+              <input
+                type="text"
+                placeholder="Discord"
+                onChange={(e) => setDiscord(e.target.value)}
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button>Create Account</button>
+            </form>
+            {submittedState && (
+              <p>Please check your email for a verification link!</p>
+            )}
+            {usernameTaken && <p>Username is already in use!</p>}
+            {emailTaken && <p>Email is already in use!</p>}
+            {errorState && <p>Something went wrong!</p>}
+            <div className={styles.navigator}>
+              <p>Already have an account?</p>
+              <Link href="/">Sign In</Link>
+            </div>
+          </div>
+        </main>
+      </>
+    );
+  } else {
+    router.push("/dashboard");
+  }
 }

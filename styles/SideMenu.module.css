@@ -1,0 +1,74 @@
+.sideMenu {
+  display: flex;
+  flex-direction: column;
+  /* justify-content: space-between; */
+  gap: 2rem;
+  background-color: black;
+  padding: 1.5rem;
+  min-height: 100vh;
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0.6rem;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.navItem:hover {
+  color: #fff;
+  background-color: #202020;
+}
+
+.navItem a {
+  font-size: 18px;
+}
+
+.sideHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sideHeader p {
+  font-size: 20px;
+}
+
+.menuTitle {
+  color: #adadad;
+  font-weight: 500;
+}
+
+.mainMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #adadad;
+  font-weight: 500;
+}
+
+.guildMenu {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  color: #adadad;
+  font-weight: 500;
+}
+
+.bottomMenu {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-top: auto;
+}
+
+.bottomMenu div:first-child {
+  margin-top: auto;
+}
+
+.active {
+  color: #fff;
+  background-color: #202020;
+}

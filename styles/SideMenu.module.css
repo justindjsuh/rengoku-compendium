@@ -84,3 +84,8 @@
   color: #fff;
   background-color: #202020;
 }
+
+.navItem svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}

@@ -6,7 +6,34 @@ import Image from "next/image";
 import Link from "next/link";
 import SideMenu from "@/comps/SideMenu";
 
+interface DailyTime {
+  hrs: number;
+  mins: number;
+  secs: number;
+}
+
+const calculateDaily = () => {
+  const date = new Date();
+  const hrs = date.getHours();
+  const mins = date.getMinutes();
+  const secs = date.getSeconds();
+  const targetHrs = 20;
+  const targetMins = 0;
+  const targetSecs = 0;
+  const currentTime = `${hrs} ${mins} ${secs}`;
+  const dailyTimeLeft = {
+    hrs,
+    mins,
+    secs,
+  };
+  console.log(currentTime);
+  return dailyTimeLeft;
+};
+calculateDaily();
 export default function Dashboard({ data }: any) {
+  const [dailyTimeLeft, setDailyTimeLeft] = useState<DailyTime>(
+    calculateDaily()
+  );
   const character = data.CharacterData;
   const [profile, setProfile] = useState<{ username: string } | null>({
     username: "",
@@ -26,6 +53,10 @@ export default function Dashboard({ data }: any) {
   useEffect(() => {
     if (!user) router.push("/");
     if (user) getProfile();
+    const timer = setTimeout(() => {
+      setDailyTimeLeft({ ...calculateDaily() });
+    }, 1000);
+    return () => clearTimeout(timer);
   }, [getProfile, router, user]);
 
   return (
@@ -66,6 +97,17 @@ export default function Dashboard({ data }: any) {
           <div className={styles.rightContainer}>
             <div className={styles.timeContainer}>
               <p>Time until reset</p>
+              <h2>
+                {dailyTimeLeft.hrs.toString().length === 1
+                  ? `0${dailyTimeLeft.hrs}`
+                  : `${dailyTimeLeft.hrs}`}{" "}
+                {dailyTimeLeft.mins.toString().length === 1
+                  ? `0${dailyTimeLeft.mins}`
+                  : `${dailyTimeLeft.mins}`}{" "}
+                {dailyTimeLeft.secs.toString().length === 1
+                  ? `0${dailyTimeLeft.secs}`
+                  : `${dailyTimeLeft.secs}`}
+              </h2>
               <p>Time until weekly reset</p>
             </div>
             <div className={styles.eventsContainer}>

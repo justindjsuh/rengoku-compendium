@@ -5,34 +5,61 @@ import styles from "@/styles/Dashboard.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import SideMenu from "@/comps/SideMenu";
+import { domainToASCII } from "url";
 
 interface DailyTime {
+  hoursLeft: number;
+  mins: number;
+  secs: number;
+}
+
+interface WeeklyTime {
+  days: number;
   hrs: number;
   mins: number;
   secs: number;
 }
 
-const calculateDaily = () => {
-  const date = new Date();
-  const hrs = date.getHours();
-  const mins = date.getMinutes();
-  const secs = date.getSeconds();
-  const targetHrs = 20;
-  const targetMins = 0;
-  const targetSecs = 0;
-  const currentTime = `${hrs} ${mins} ${secs}`;
-  const dailyTimeLeft = {
-    hrs,
-    mins,
-    secs,
-  };
-  console.log(currentTime);
-  return dailyTimeLeft;
-};
-calculateDaily();
 export default function Dashboard({ data }: any) {
+  const calculateDaily = () => {
+    const date = new Date();
+    const hrs = date.getHours();
+    const mins = date.getMinutes();
+    const secs = date.getSeconds();
+    let hoursLeft;
+    if (20 - hrs < 0) {
+      hoursLeft = 20 - hrs + 24;
+    } else hoursLeft = 20 - hrs;
+    return {
+      hoursLeft,
+      mins: 59 - mins,
+      secs: 59 - secs,
+    };
+  };
+
+  const calculateWeekly = () => {
+    const date = new Date();
+    const day = date.getDay();
+    const hrs = date.getHours();
+    const mins = date.getMinutes();
+    const secs = date.getSeconds();
+    let days;
+    if (day - 3 < 0) {
+      days = day - 3 + 7;
+    } else days = day - 3;
+    return {
+      days,
+      hrs: 20 - hrs,
+      mins: 59 - mins,
+      secs: 59 - secs,
+    };
+  };
+
   const [dailyTimeLeft, setDailyTimeLeft] = useState<DailyTime>(
     calculateDaily()
+  );
+  const [weeklyTimeLeft, setWeeklyTimeLeft] = useState<WeeklyTime>(
+    calculateWeekly()
   );
   const character = data.CharacterData;
   const [profile, setProfile] = useState<{ username: string } | null>({
@@ -53,11 +80,17 @@ export default function Dashboard({ data }: any) {
   useEffect(() => {
     if (!user) router.push("/");
     if (user) getProfile();
-    const timer = setTimeout(() => {
-      setDailyTimeLeft({ ...calculateDaily() });
-    }, 1000);
-    return () => clearTimeout(timer);
-  }, [getProfile, router, user]);
+    // const dailyTimer = setTimeout(() => {
+    //   setDailyTimeLeft({ ...dailyTimeLeft, ...calculateDaily() });
+    // }, 1000);
+    // const weeklyTimer = setTimeout(() => {
+    //   setWeeklyTimeLeft({ ...weeklyTimeLeft, ...calculateWeekly() });
+    // }, 1000);
+    // return () => {
+    //   clearTimeout(dailyTimer);
+    //   clearTimeout(weeklyTimer);
+    // };
+  }, [getProfile, router, user, dailyTimeLeft, weeklyTimeLeft]);
 
   return (
     <div className={styles.container}>
@@ -98,9 +131,9 @@ export default function Dashboard({ data }: any) {
             <div className={styles.timeContainer}>
               <p>Time until reset</p>
               <h2>
-                {dailyTimeLeft.hrs.toString().length === 1
-                  ? `0${dailyTimeLeft.hrs}`
-                  : `${dailyTimeLeft.hrs}`}{" "}
+                {dailyTimeLeft.hoursLeft.toString().length === 1
+                  ? `0${dailyTimeLeft.hoursLeft}`
+                  : `${dailyTimeLeft.hoursLeft}`}{" "}
                 {dailyTimeLeft.mins.toString().length === 1
                   ? `0${dailyTimeLeft.mins}`
                   : `${dailyTimeLeft.mins}`}{" "}
@@ -109,6 +142,20 @@ export default function Dashboard({ data }: any) {
                   : `${dailyTimeLeft.secs}`}
               </h2>
               <p>Time until weekly reset</p>
+              <h2>
+                {weeklyTimeLeft.days.toString().length === 1
+                  ? `0${weeklyTimeLeft.days}`
+                  : `${weeklyTimeLeft.days}`}{" "}
+                {weeklyTimeLeft.hrs.toString().length === 1
+                  ? `0${weeklyTimeLeft.hrs}`
+                  : `${weeklyTimeLeft.hrs}`}{" "}
+                {weeklyTimeLeft.mins.toString().length === 1
+                  ? `0${weeklyTimeLeft.mins}`
+                  : `${weeklyTimeLeft.mins}`}{" "}
+                {weeklyTimeLeft.secs.toString().length === 1
+                  ? `0${weeklyTimeLeft.secs}`
+                  : `${weeklyTimeLeft.secs}`}
+              </h2>
             </div>
             <div className={styles.eventsContainer}>
               <p>Upcoming Events</p>
@@ -121,6 +168,7 @@ export default function Dashboard({ data }: any) {
 }
 
 export async function getServerSideProps() {
+  console.log("WEFOWEUFWOEFWE:FOEFH");
   const res = await fetch(
     "https://api.maplestory.gg/v2/public/character/gms/Murkuro"
   );

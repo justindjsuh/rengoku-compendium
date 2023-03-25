@@ -1,11 +1,12 @@
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import styles from "@/styles/Dashboard.module.css";
 import Image from "next/image";
 import Link from "next/link";
 import SideMenu from "@/comps/SideMenu";
-import { domainToASCII } from "url";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 
 interface DailyTime {
   hoursLeft: number;
@@ -20,7 +21,7 @@ interface WeeklyTime {
   secs: number;
 }
 
-export default function Dashboard({ data }: any) {
+export default function Dashboard() {
   const calculateDaily = () => {
     const date = new Date();
     const hrs = date.getHours();
@@ -28,8 +29,8 @@ export default function Dashboard({ data }: any) {
     const secs = date.getSeconds();
     let hoursLeft;
     if (20 - hrs < 0) {
-      hoursLeft = 20 - hrs + 24;
-    } else hoursLeft = 20 - hrs;
+      hoursLeft = 19 - hrs + 24;
+    } else hoursLeft = 19 - hrs;
     return {
       hoursLeft,
       mins: 59 - mins,
@@ -44,12 +45,12 @@ export default function Dashboard({ data }: any) {
     const mins = date.getMinutes();
     const secs = date.getSeconds();
     let days;
-    if (day - 3 < 0) {
-      days = day - 3 + 7;
+    if (3 - day < 0) {
+      days = 10 - day;
     } else days = day - 3;
     return {
       days,
-      hrs: 20 - hrs,
+      hrs: 19 - hrs,
       mins: 59 - mins,
       secs: 59 - secs,
     };
@@ -61,10 +62,10 @@ export default function Dashboard({ data }: any) {
   const [weeklyTimeLeft, setWeeklyTimeLeft] = useState<WeeklyTime>(
     calculateWeekly()
   );
-  const character = data.CharacterData;
   const [profile, setProfile] = useState<{ username: string } | null>({
     username: "",
   });
+
   const user = useUser();
   const router = useRouter();
   const supabase = useSupabaseClient();
@@ -80,16 +81,16 @@ export default function Dashboard({ data }: any) {
   useEffect(() => {
     if (!user) router.push("/");
     if (user) getProfile();
-    // const dailyTimer = setTimeout(() => {
-    //   setDailyTimeLeft({ ...dailyTimeLeft, ...calculateDaily() });
-    // }, 1000);
-    // const weeklyTimer = setTimeout(() => {
-    //   setWeeklyTimeLeft({ ...weeklyTimeLeft, ...calculateWeekly() });
-    // }, 1000);
-    // return () => {
-    //   clearTimeout(dailyTimer);
-    //   clearTimeout(weeklyTimer);
-    // };
+    const dailyTimer = setTimeout(() => {
+      setDailyTimeLeft({ ...dailyTimeLeft, ...calculateDaily() });
+    }, 1000);
+    const weeklyTimer = setTimeout(() => {
+      setWeeklyTimeLeft({ ...weeklyTimeLeft, ...calculateWeekly() });
+    }, 1000);
+    return () => {
+      clearTimeout(dailyTimer);
+      clearTimeout(weeklyTimer);
+    };
   }, [getProfile, router, user, dailyTimeLeft, weeklyTimeLeft]);
 
   return (
@@ -107,58 +108,64 @@ export default function Dashboard({ data }: any) {
         </div>
         <div className={styles.dashDetails}>
           <div className={styles.avatarContainer}>
-            <Image
-              src={character.CharacterImageURL}
-              alt="character avatar"
-              width={150}
-              height={150}
-            />
-            <p className={styles.avatarName}>{character.Name}</p>
-            <p>
-              Level {character.Level} ({character.EXPPercent}
-              %)
-            </p>
-            <p>Class: {character.Class}</p>
-            <p>
-              {character.Class} Rank {character.ClassRank}
-            </p>
-            <p>
-              {character.Server} Rank {character.ServerClassRanking}
-            </p>
-            <p>Legion: {character.LegionLevel}</p>
+            <p>Avatar Container</p>
           </div>
           <div className={styles.rightContainer}>
             <div className={styles.timeContainer}>
               <p>Time until reset</p>
               <h2>
                 {dailyTimeLeft.hoursLeft.toString().length === 1
-                  ? `0${dailyTimeLeft.hoursLeft}`
-                  : `${dailyTimeLeft.hoursLeft}`}{" "}
+                  ? `0${dailyTimeLeft.hoursLeft}h`
+                  : `${dailyTimeLeft.hoursLeft}h`}{" "}
                 {dailyTimeLeft.mins.toString().length === 1
-                  ? `0${dailyTimeLeft.mins}`
-                  : `${dailyTimeLeft.mins}`}{" "}
+                  ? `0${dailyTimeLeft.mins}m`
+                  : `${dailyTimeLeft.mins}m`}{" "}
                 {dailyTimeLeft.secs.toString().length === 1
-                  ? `0${dailyTimeLeft.secs}`
-                  : `${dailyTimeLeft.secs}`}
+                  ? `0${dailyTimeLeft.secs}s`
+                  : `${dailyTimeLeft.secs}s`}
               </h2>
               <p>Time until weekly reset</p>
               <h2>
                 {weeklyTimeLeft.days.toString().length === 1
-                  ? `0${weeklyTimeLeft.days}`
-                  : `${weeklyTimeLeft.days}`}{" "}
+                  ? `0${weeklyTimeLeft.days}d`
+                  : `${weeklyTimeLeft.days}d`}{" "}
                 {weeklyTimeLeft.hrs.toString().length === 1
-                  ? `0${weeklyTimeLeft.hrs}`
-                  : `${weeklyTimeLeft.hrs}`}{" "}
+                  ? `0${weeklyTimeLeft.hrs}h`
+                  : `${weeklyTimeLeft.hrs}h`}{" "}
                 {weeklyTimeLeft.mins.toString().length === 1
-                  ? `0${weeklyTimeLeft.mins}`
-                  : `${weeklyTimeLeft.mins}`}{" "}
+                  ? `0${weeklyTimeLeft.mins}m`
+                  : `${weeklyTimeLeft.mins}m`}{" "}
                 {weeklyTimeLeft.secs.toString().length === 1
-                  ? `0${weeklyTimeLeft.secs}`
-                  : `${weeklyTimeLeft.secs}`}
+                  ? `0${weeklyTimeLeft.secs}s`
+                  : `${weeklyTimeLeft.secs}s`}
               </h2>
             </div>
-            <div className={styles.eventsContainer}>
-              <p>Upcoming Events</p>
+            <div className={styles.detailContainer}>
+              <div className={styles.eventsContainer}>
+                <div className={styles.eventsHeader}>
+                  <h2>Upcoming Events</h2>
+                  <FontAwesomeIcon
+                    icon={faArrowRight}
+                    size="2xl"
+                    style={{ color: "#e8e8e8" }}
+                  />
+                </div>
+              </div>
+              <div className={styles.membersContainer}>
+                <div className={styles.membersHeader}>
+                  <h2>Guild Members</h2>
+                  <FontAwesomeIcon
+                    icon={faArrowRight}
+                    size="2xl"
+                    style={{ color: "#e8e8e8" }}
+                  />
+                </div>
+                <div className={styles.membersContent}>
+                  <p>Pantimos</p>
+                  <p>Pantimos</p>
+                  <p>Pantimos</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -168,10 +175,9 @@ export default function Dashboard({ data }: any) {
 }
 
 export async function getServerSideProps() {
-  console.log("WEFOWEUFWOEFWE:FOEFH");
-  const res = await fetch(
-    "https://api.maplestory.gg/v2/public/character/gms/Murkuro"
-  );
-  const data = await res.json();
-  return { props: { data } };
+  //   const res = await fetch(
+  //     "https://api.maplestory.gg/v2/public/character/gms/Murkuro"
+  //   );
+  //   const data = await res.json();
+  //   return { props: { data } };
 }

@@ -32,12 +32,6 @@ export default function SideMenu() {
   };
   return (
     <>
-      <Head>
-        <link
-          href="https://use.fontawesome.com/releases/vVERSION/css/svg-with-js.css"
-          rel="stylesheet"
-        ></link>
-      </Head>
       <div className={styles.sideMenu}>
         <div className={styles.sideHeader}>
           <Image src="/logo.png" alt="fire logo" width={50} height={65} />

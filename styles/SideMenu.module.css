@@ -24,13 +24,13 @@
 }
 
 .navItem a {
-  font-size: 16px;
+  font-size: 18px;
 }
 
 .navItem button {
   background-color: transparent;
   outline: none;
-  font-size: 16px;
+  font-size: 18px;
   border: none;
   color: #adadad;
   font-family: "Montserrat", sans-serif;

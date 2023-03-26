@@ -16,9 +16,19 @@ interface DailyTime {
 
 interface WeeklyTime {
   days: number;
-  hrs: number;
+  hoursLeft: number;
   mins: number;
   secs: number;
+}
+
+interface Members {
+  username: string;
+}
+
+interface Events {
+  id: number;
+  date: string;
+  description: string;
 }
 
 export default function Dashboard() {
@@ -28,7 +38,7 @@ export default function Dashboard() {
     const mins = date.getMinutes();
     const secs = date.getSeconds();
     let hoursLeft;
-    if (20 - hrs < 0) {
+    if (20 - hrs <= 0) {
       hoursLeft = 19 - hrs + 24;
     } else hoursLeft = 19 - hrs;
     return {
@@ -45,12 +55,16 @@ export default function Dashboard() {
     const mins = date.getMinutes();
     const secs = date.getSeconds();
     let days;
+    let hoursLeft;
     if (3 - day < 0) {
       days = 10 - day;
     } else days = day - 3;
+    if (20 - hrs <= 0) {
+      hoursLeft = 19 - hrs + 24;
+    } else hoursLeft = 19 - hrs;
     return {
       days,
-      hrs: 19 - hrs,
+      hoursLeft,
       mins: 59 - mins,
       secs: 59 - secs,
     };
@@ -65,6 +79,8 @@ export default function Dashboard() {
   const [profile, setProfile] = useState<{ username: string } | null>({
     username: "",
   });
+  const [members, setMembers] = useState<Members[]>([]);
+  const [events, setEvents] = useState<Events[]>([]);
 
   const user = useUser();
   const router = useRouter();
@@ -78,9 +94,36 @@ export default function Dashboard() {
     setProfile(data);
   }, [supabase, user?.id]);
 
+  const getMembers = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("username")
+      .eq("approved", "TRUE");
+    if (data) {
+      setMembers(data);
+    } else {
+      console.error(error);
+    }
+  }, [supabase]);
+
+  const getEvents = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("events")
+      .select("id, date, description");
+    if (data) {
+      setEvents(data);
+    } else {
+      console.error(error);
+    }
+  }, [supabase]);
+
   useEffect(() => {
     if (!user) router.push("/");
-    if (user) getProfile();
+    if (user) {
+      getProfile();
+      getMembers();
+      getEvents();
+    }
     const dailyTimer = setTimeout(() => {
       setDailyTimeLeft({ ...dailyTimeLeft, ...calculateDaily() });
     }, 1000);
@@ -91,7 +134,15 @@ export default function Dashboard() {
       clearTimeout(dailyTimer);
       clearTimeout(weeklyTimer);
     };
-  }, [getProfile, router, user, dailyTimeLeft, weeklyTimeLeft]);
+  }, [
+    getProfile,
+    router,
+    user,
+    dailyTimeLeft,
+    weeklyTimeLeft,
+    getMembers,
+    getEvents,
+  ]);
 
   return (
     <div className={styles.container}>
@@ -126,44 +177,69 @@ export default function Dashboard() {
               </h2>
               <p>Time until weekly reset</p>
               <h2>
-                {weeklyTimeLeft.days.toString().length === 1
-                  ? `0${weeklyTimeLeft.days}d`
-                  : `${weeklyTimeLeft.days}d`}{" "}
-                {weeklyTimeLeft.hrs.toString().length === 1
-                  ? `0${weeklyTimeLeft.hrs}h`
-                  : `${weeklyTimeLeft.hrs}h`}{" "}
+                {weeklyTimeLeft.days > 0 ? `${weeklyTimeLeft.days}d` : null}{" "}
+                {weeklyTimeLeft.hoursLeft.toString().length === 1
+                  ? `0${weeklyTimeLeft.hoursLeft}h`
+                  : `${weeklyTimeLeft.hoursLeft}h`}{" "}
                 {weeklyTimeLeft.mins.toString().length === 1
                   ? `0${weeklyTimeLeft.mins}m`
                   : `${weeklyTimeLeft.mins}m`}{" "}
-                {weeklyTimeLeft.secs.toString().length === 1
-                  ? `0${weeklyTimeLeft.secs}s`
-                  : `${weeklyTimeLeft.secs}s`}
+                {weeklyTimeLeft.days === 0
+                  ? weeklyTimeLeft.secs.toString().length === 1
+                    ? `0${weeklyTimeLeft.secs}s`
+                    : `${weeklyTimeLeft.secs}s`
+                  : null}
               </h2>
             </div>
             <div className={styles.detailContainer}>
               <div className={styles.eventsContainer}>
                 <div className={styles.eventsHeader}>
                   <h2>Upcoming Events</h2>
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    size="2xl"
-                    style={{ color: "#e8e8e8" }}
-                  />
+                  <Link href="/events">
+                    <FontAwesomeIcon
+                      icon={faArrowRight}
+                      size="2xl"
+                      style={{ color: "#e8e8e8" }}
+                    />
+                  </Link>
+                </div>
+                <div className={styles.eventsContent}>
+                  {/* going to have to slice it to only handle up to X amount of elements */}
+                  {events.map((event, idx) => (
+                    <div key={idx} className={styles.event}>
+                      <p>{event.date}</p>
+                      <p>{event.description}</p>
+                    </div>
+                  ))}
                 </div>
               </div>
               <div className={styles.membersContainer}>
                 <div className={styles.membersHeader}>
                   <h2>Guild Members</h2>
-                  <FontAwesomeIcon
-                    icon={faArrowRight}
-                    size="2xl"
-                    style={{ color: "#e8e8e8" }}
-                  />
+                  <Link href="/members">
+                    <FontAwesomeIcon
+                      icon={faArrowRight}
+                      size="2xl"
+                      style={{ color: "#e8e8e8" }}
+                    />
+                  </Link>
                 </div>
                 <div className={styles.membersContent}>
-                  <p>Pantimos</p>
-                  <p>Pantimos</p>
-                  <p>Pantimos</p>
+                  {/* going to have to slice it to only handle up to X amount of elements */}
+                  {members.map((member, idx) => (
+                    <div key={idx} className={styles.member}>
+                      <div className={styles.memberDetails}>
+                        <Image
+                          src="/logo.png"
+                          alt="fire logo"
+                          width={34}
+                          height={45}
+                        />
+                        <p>{member.username}</p>
+                      </div>
+                      <button>View Profile</button>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
@@ -174,10 +250,10 @@ export default function Dashboard() {
   );
 }
 
-export async function getServerSideProps() {
-  //   const res = await fetch(
-  //     "https://api.maplestory.gg/v2/public/character/gms/Murkuro"
-  //   );
-  //   const data = await res.json();
-  //   return { props: { data } };
-}
+// export async function getServerSideProps() {
+//   const res = await fetch(
+//     "https://api.maplestory.gg/v2/public/character/gms/Murkuro"
+//   );
+//   const data = await res.json();
+//   return { props: { data } };
+// }

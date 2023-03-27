@@ -249,11 +249,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-// export async function getServerSideProps() {
-//   const res = await fetch(
-//     "https://api.maplestory.gg/v2/public/character/gms/Murkuro"
-//   );
-//   const data = await res.json();
-//   return { props: { data } };
-// }

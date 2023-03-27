@@ -58,7 +58,7 @@ export default function Dashboard() {
     let hoursLeft;
     if (3 - day < 0) {
       days = 10 - day;
-    } else days = day - 3;
+    } else days = 3 - day;
     if (20 - hrs <= 0) {
       hoursLeft = 19 - hrs + 24;
     } else hoursLeft = 19 - hrs;

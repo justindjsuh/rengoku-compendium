@@ -87,8 +87,16 @@
 }
 
 .details {
+  height: 850px; /* need to setup media query */
+  display: flex;
+  justify-content: center;
+  align-items: center;
   flex: 1;
   background-color: #202020;
   margin: 2rem 2rem 2rem 0rem;
   border-radius: 10px;
+}
+
+.details p {
+  font-size: 32px;
 }

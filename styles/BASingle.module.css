@@ -1,0 +1,57 @@
+.baSingleContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  gap: 1rem;
+  overflow-y: auto;
+}
+
+.baSingleContainer::-webkit-scrollbar {
+  width: 10px;
+}
+
+.baSingleContainer::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.baSingleContainer::-webkit-scrollbar-thumb {
+  background: #3e3e3e;
+}
+
+.singleBAContainer {
+  width: 100%;
+  padding: 2rem;
+  background-color: #161616;
+  border-radius: 10px;
+}
+
+.BAHeader {
+  display: flex;
+  gap: 1rem;
+}
+
+.BAHeader span {
+  font-size: 20px;
+}
+
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 16px;
+}
+
+.timer p {
+  font-size: 16px;
+}
+
+.singleBAContainer table {
+  text-align: left;
+}
+
+.singleBAContainer th {
+  padding: 0.5rem 4rem 0.5rem 0;
+}

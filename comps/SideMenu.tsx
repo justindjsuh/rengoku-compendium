@@ -97,7 +97,7 @@ export default function SideMenu() {
               icon={faAddressBook}
               style={{ color: "#adadad" }}
             />
-            <Link href="/members">Guild Profile</Link>
+            <Link href="/guild-profile">Guild Profile</Link>
           </div>
           <div
             className={`${styles.navItem} ${

@@ -89,7 +89,6 @@ export default function BAHistory() {
             ) : (
               <p>Select a date to see details</p>
             )}
-            <div></div>
           </div>
         </div>
       </div>

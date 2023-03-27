@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+}
+
+.lootContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  padding: 2rem;
+  background-color: #202020;
+}
+
+.dashHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashHeader h1 {
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.dashHeader img {
+  border-radius: 50%;
+}

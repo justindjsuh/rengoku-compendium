@@ -1,0 +1,123 @@
+.container {
+  display: flex;
+}
+
+.membersContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  padding: 2rem;
+  background-color: #202020;
+}
+
+.dashHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashHeader h1 {
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.dashHeader img {
+  border-radius: 50%;
+}
+
+.membersDetails {
+  display: flex;
+  height: 100%;
+  gap: 2rem;
+}
+
+.guildInfo {
+  flex: 1;
+  background-color: #161616;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.guildMembers {
+  flex: 2;
+  background-color: #161616;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.guildInfo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.guildName {
+  font-size: 36px;
+  font-weight: 500;
+  margin-bottom: 2rem;
+}
+
+.guildDetails {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 2rem;
+}
+
+.guildDetails p {
+  font-size: 20px;
+}
+
+.announcements {
+  background-color: #202020;
+  padding: 2rem;
+  margin: 0 2rem;
+  border-radius: 10px;
+}
+
+.announcementHeader {
+  font-size: 20px;
+  align-self: flex-start;
+  padding: 0 2rem;
+}
+
+.guildInfo hr {
+  width: 90%;
+  border: 1px solid #3e3e3e;
+}
+
+.guildMembers {
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+}
+
+.member {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1rem;
+  border-radius: 10px;
+  font-size: 22px;
+  font-weight: 500;
+  background-color: #202020;
+}
+
+.member a {
+  outline: none;
+  border: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+  padding: 0.5rem 1rem;
+  font-size: 18px;
+  border-radius: 10px;
+  background: linear-gradient(#161616, #161616) padding-box,
+    linear-gradient(to right, #fac235, #fba21c, #f97f11, #f55718, #ed1c24)
+      border-box;
+  color: #e8e8e8;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+}

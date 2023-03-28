@@ -77,7 +77,14 @@ export default function GuildProfile() {
               <div key={member.id} className={styles.member}>
                 <Image src="/logo.png" alt="fire logo" width={34} height={45} />
                 <p>{member.username}</p>
-                <Link href={`/user/${member.username}`}>View Profile</Link>
+                {/* <Link href={`/user/${member.username}`}>View Profile</Link> */}
+                <Link
+                  href={`https://maplestory.gg/c/gms/${member.username}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View Profile
+                </Link>
               </div>
             ))}
           </div>

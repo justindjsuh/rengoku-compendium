@@ -1,0 +1,41 @@
+.container {
+  display: flex;
+}
+
+.userContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+  padding: 2rem;
+  background-color: #202020;
+}
+
+.dashHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashHeader h1 {
+  font-weight: 500;
+  font-size: 36px;
+}
+
+.dashHeader img {
+  border-radius: 50%;
+}
+
+.userDetails {
+  display: flex;
+  background-color: #161616;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.banner {
+  width: 100%;
+  height: 25%;
+  background-image: url("../public/dark_sun.png");
+  border-radius: 10px;
+}

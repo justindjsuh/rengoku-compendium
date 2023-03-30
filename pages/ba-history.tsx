@@ -34,10 +34,12 @@ export default function BAHistory() {
   const [dateList, setDateList] = useState<BA | []>([]);
   const [BAInfo, setBAInfo] = useState<BA_Single[] | []>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [currentDate, setCurrentDate] = useState<string>("");
 
   const handleDateClick = (BAinfo: BA_History) => {
     if (BAinfo.ba) {
       setBAInfo(BAinfo.ba);
+      setCurrentDate(BAinfo.date);
     }
   };
 
@@ -87,7 +89,13 @@ export default function BAHistory() {
             {/* map over dates */}
             {dateList.map((date, idx) => {
               return (
-                <button key={idx} onClick={() => handleDateClick(date)}>
+                <button
+                  className={
+                    currentDate === date.date ? `${styles.active}` : ""
+                  }
+                  key={idx}
+                  onClick={() => handleDateClick(date)}
+                >
                   {date.date}
                 </button>
               );

@@ -4,6 +4,16 @@ import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { SetStateAction, useState } from "react";
 
+const jobList = [
+  "Player Job",
+  "Adele",
+  "Bishop",
+  "Dawn Warrior",
+  "I/L",
+  "Kain",
+  "Shadower",
+];
+
 interface BAModal_Props {
   setShowModal: React.Dispatch<SetStateAction<boolean>>;
   getData: () => void;
@@ -74,7 +84,7 @@ export const BAModal: React.FC<BAModal_Props> = ({ setShowModal, getData }) => {
     <div className={styles.modalContainer}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <p>Battle Analysis</p>
+          <p>Battle Analysis Entry</p>
           <FontAwesomeIcon
             onClick={() => setShowModal(false)}
             icon={faXmark}
@@ -98,30 +108,37 @@ export const BAModal: React.FC<BAModal_Props> = ({ setShowModal, getData }) => {
               />
             </div>
             <div>
-              <input
+              {/* <input
                 type="text"
                 placeholder="Player Job"
                 onChange={(e) => setPlayerJob(e.target.value)}
-              />
-            </div>
-            <div>
+              /> */}
+              <select onChange={(e) => setPlayerJob(e.target.value)}>
+                {jobList.map((job, idx) => (
+                  <option key={idx} value={job}>
+                    {job}
+                  </option>
+                ))}
+              </select>
               <input
                 type="text"
                 placeholder="Time"
                 onChange={(e) => setTime(e.target.value)}
               />
+            </div>
+            <div>
               <input
                 type="text"
                 placeholder="Damage"
                 onChange={(e) => setDamage(e.target.value)}
               />
-            </div>
-            <div>
               <input
                 type="text"
                 placeholder="IED"
                 onChange={(e) => setIED(e.target.value)}
               />
+            </div>
+            <div>
               <input
                 type="text"
                 placeholder="Boss%"

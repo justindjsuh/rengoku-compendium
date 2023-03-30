@@ -59,6 +59,19 @@
   align-items: center;
 }
 
+.modalForm div select {
+  background-color: #161616;
+  border-radius: 10px;
+  padding: 0.7rem;
+  color: #838383;
+  font-size: 16px;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+}
+
 .dateDiv input:first-child {
   color: #838383;
   font-family: "Montserrat", sans-serif;
@@ -77,6 +90,7 @@
   font-size: 16px;
   padding: 0.7rem;
   color: #e8e8e8;
+  width: 100%;
 }
 
 .modalForm button {

@@ -1,3 +1,4 @@
+import { BAModal } from "@/comps/BAModal";
 import { BASingle } from "@/comps/BASingle";
 import SideMenu from "@/comps/SideMenu";
 import styles from "@/styles/BAHistory.module.css";
@@ -32,7 +33,8 @@ type BA_History = {
 export default function BAHistory() {
   const [dateList, setDateList] = useState<BA | []>([]);
   const [BAInfo, setBAInfo] = useState<BA_Single[] | []>([]);
-  console.log(dateList);
+  const [showModal, setShowModal] = useState<boolean>(false);
+
   const handleDateClick = (BAinfo: BA_History) => {
     if (BAinfo.ba) {
       setBAInfo(BAinfo.ba);
@@ -53,6 +55,10 @@ export default function BAHistory() {
     }
   }, []);
 
+  const handleAddBA = () => {
+    setShowModal(true);
+  };
+
   useEffect(() => {
     getData();
   }, [getData]);
@@ -60,6 +66,9 @@ export default function BAHistory() {
   return (
     <div className={styles.container}>
       <SideMenu />
+      {showModal ? (
+        <BAModal setShowModal={setShowModal} getData={getData} />
+      ) : null}
       <div className={styles.BAContainer}>
         <div className={styles.dashHeader}>
           <h1>Battle Analysis History</h1>
@@ -72,7 +81,9 @@ export default function BAHistory() {
         </div>
         <div className={styles.BADetails}>
           <div className={styles.dateList}>
-            <button className={styles.newBtn}>New +</button>
+            <button className={styles.newBtn} onClick={handleAddBA}>
+              New +
+            </button>
             {/* map over dates */}
             {dateList.map((date, idx) => {
               return (

@@ -117,7 +117,7 @@ export default function Signup() {
             />
             <input
               type="text"
-              placeholder="Maplestory Username"
+              placeholder="Maplestory IGN"
               onChange={(e) => setUsername(e.target.value)}
             />
             <input

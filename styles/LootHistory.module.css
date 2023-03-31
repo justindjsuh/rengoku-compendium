@@ -25,3 +25,74 @@
 .dashHeader img {
   border-radius: 50%;
 }
+
+.lootDetails {
+  display: flex;
+  background-color: #161616;
+  height: 100%;
+  border-radius: 10px;
+}
+
+.bossList {
+  height: 850px; /* need to setup media query */
+  display: flex;
+  flex-direction: column;
+  background-color: #202020;
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 2rem;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.bossList::-webkit-scrollbar {
+  width: 10px;
+}
+
+.bossList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.bossList::-webkit-scrollbar-thumb {
+  background: #3e3e3e;
+}
+
+.bossList button {
+  outline: none;
+  background-color: transparent;
+  border: none;
+  color: #e8e8e8;
+  font-size: 18px;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  padding: 1rem 2rem;
+  border-top: 1px solid #3e3e3e;
+  border-radius: 5px;
+}
+
+.bossList button:last-child {
+  border-bottom: 1px solid #3e3e3e;
+}
+
+.bossList button:hover {
+  background-color: #3e3e3e;
+}
+
+.bossList .active {
+  background-color: #3e3e3e;
+}
+
+.details {
+  height: 850px; /* need to setup media query */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  background-color: #202020;
+  margin: 2rem 2rem 2rem 0rem;
+  border-radius: 10px;
+}
+
+.details p {
+  font-size: 32px;
+}

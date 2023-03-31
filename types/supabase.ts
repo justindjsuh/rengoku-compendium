@@ -50,6 +50,69 @@ export interface Database {
           user_id?: number
         }
       }
+      boss_difficulty: {
+        Row: {
+          boss_id: number
+          boss_name: string
+          difficulty: string
+          id: number
+        }
+        Insert: {
+          boss_id: number
+          boss_name: string
+          difficulty: string
+          id?: number
+        }
+        Update: {
+          boss_id?: number
+          boss_name?: string
+          difficulty?: string
+          id?: number
+        }
+      }
+      bosses: {
+        Row: {
+          banner: string
+          id: number
+          name: string
+          order: number
+        }
+        Insert: {
+          banner: string
+          id?: number
+          name: string
+          order: number
+        }
+        Update: {
+          banner?: string
+          id?: number
+          name?: string
+          order?: number
+        }
+      }
+      clear_history: {
+        Row: {
+          created_at: string
+          date: string
+          difficulty_id: number
+          id: number
+          sweeper: string | null
+        }
+        Insert: {
+          created_at?: string
+          date: string
+          difficulty_id: number
+          id?: number
+          sweeper?: string | null
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          difficulty_id?: number
+          id?: number
+          sweeper?: string | null
+        }
+      }
       events: {
         Row: {
           created_at: string | null
@@ -68,6 +131,29 @@ export interface Database {
           date?: string
           description?: string
           id?: number
+        }
+      }
+      loot_history: {
+        Row: {
+          created_at: string | null
+          id: number
+          item_name: string | null
+          owner: string | null
+          week_id: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: number
+          item_name?: string | null
+          owner?: string | null
+          week_id: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: number
+          item_name?: string | null
+          owner?: string | null
+          week_id?: number
         }
       }
       users: {

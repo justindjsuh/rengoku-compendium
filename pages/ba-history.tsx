@@ -20,7 +20,10 @@ export default function BAHistory() {
   const [userList, setUserList] = useState<User_List | []>([]);
   const [BAInfo, setBAInfo] = useState<BA | []>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentPlayer, setCurrentPlayer] = useState<Single_User | {}>({});
+  const [currentPlayer, setCurrentPlayer] = useState<Single_User>({
+    username: "",
+    player_job: "",
+  });
   const [currentUsername, setCurrentUsername] = useState<string>("");
 
   const handleUsernameClick = async (BAinfo: User) => {
@@ -30,12 +33,14 @@ export default function BAHistory() {
         .select("*")
         .eq("player_name", BAinfo.username);
       if (data) {
-        const player = {
-          username: BAinfo.username,
-          player_job: BAinfo.player_job,
-        };
+        if (BAinfo.username && BAinfo.player_job) {
+          const player = {
+            username: BAinfo.username,
+            player_job: BAinfo.player_job,
+          };
+          setCurrentPlayer(player);
+        }
         setBAInfo(data);
-        setCurrentPlayer(player);
         setCurrentUsername(BAinfo.username);
       }
     }
@@ -96,7 +101,7 @@ export default function BAHistory() {
           </div>
           <div className={styles.details}>
             {BAInfo.length > 0 ? (
-              <BASingle test={currentPlayer} BAInfo={[...BAInfo]} />
+              <BASingle currentPlayer={currentPlayer} BAInfo={[...BAInfo]} />
             ) : currentUsername ? (
               <p>This user currently has no BA history</p>
             ) : (

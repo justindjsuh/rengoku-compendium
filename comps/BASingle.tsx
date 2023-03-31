@@ -6,22 +6,22 @@ import { Database } from "../types/supabase";
 type BA = Database["public"]["Tables"]["ba_history"]["Row"][];
 
 interface Single_User {
-  username: string | null;
-  player_job: string | null;
+  username: string;
+  player_job: string;
 }
 interface BA_Props {
   BAInfo: BA;
-  test: Single_User | {};
+  currentPlayer: Single_User;
 }
 
-export const BASingle: React.FC<BA_Props> = ({ BAInfo, test }) => {
+export const BASingle: React.FC<BA_Props> = ({ BAInfo, currentPlayer }) => {
   return (
     <div className={styles.baSingleContainer}>
       {BAInfo.map((ba, idx) => (
         <div key={idx} className={styles.singleBAContainer}>
           <div className={styles.BAHeader}>
             <p>
-              {ba.player_name} <span>(Player Job)</span>
+              {currentPlayer.username} <span>({currentPlayer.player_job})</span>
             </p>
             <div className={styles.timer}>
               <FontAwesomeIcon

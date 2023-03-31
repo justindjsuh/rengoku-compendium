@@ -37,6 +37,10 @@
   align-items: center;
 }
 
+.playerInfo p:last-child {
+  font-size: 24px;
+}
+
 .modalHeader svg {
   cursor: pointer;
 }
@@ -59,17 +63,8 @@
   align-items: center;
 }
 
-.modalForm div select {
-  background-color: #161616;
-  border-radius: 10px;
-  padding: 0.7rem;
-  color: #838383;
-  font-size: 16px;
-  border: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  width: 100%;
+.username {
+  font-size: 24px;
 }
 
 .dateDiv input:first-child {

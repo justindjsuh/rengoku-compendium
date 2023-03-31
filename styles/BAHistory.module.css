@@ -74,6 +74,19 @@
   background-color: #c3171d;
 }
 
+.BAList .newBtn:hover {
+  background-color: #8d1115;
+}
+
+.BAList .disabled {
+  background-color: #3e3e3e;
+  cursor: default;
+}
+
+.BAList .disabled:hover {
+  background-color: #3e3e3e;
+}
+
 .BAList button:last-child {
   border-bottom: 1px solid #3e3e3e;
 }

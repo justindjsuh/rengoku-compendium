@@ -2,6 +2,7 @@ import { BAModal } from "@/comps/BAModal";
 import { BASingle } from "@/comps/BASingle";
 import SideMenu from "@/comps/SideMenu";
 import styles from "@/styles/BAHistory.module.css";
+import { useUser } from "@supabase/auth-helpers-react";
 import Image from "next/image";
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "../lib/supabaseClient";
@@ -14,29 +15,49 @@ type User = Database["public"]["Tables"]["users"]["Row"];
 interface Single_User {
   username: string;
   player_job: string;
+  id: number;
 }
 
 export default function BAHistory() {
+  const [profile, setProfile] = useState<{ username: string } | null>({
+    username: "",
+  });
   const [userList, setUserList] = useState<User_List | []>([]);
   const [BAInfo, setBAInfo] = useState<BA | []>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
   const [currentPlayer, setCurrentPlayer] = useState<Single_User>({
     username: "",
     player_job: "",
+    id: 0,
   });
   const [currentUsername, setCurrentUsername] = useState<string>("");
+
+  const user = useUser();
+
+  const getProfile = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("users")
+      .select("username")
+      .eq("auth_id", user?.id)
+      .single();
+    setProfile(data);
+  }, [user?.id]);
+
+  console.log(profile);
 
   const handleUsernameClick = async (BAinfo: User) => {
     if (BAinfo) {
       const { data, error } = await supabase
         .from("ba_history")
         .select("*")
-        .eq("player_name", BAinfo.username);
+        .eq("player_name", BAinfo.username)
+        .order("date", { ascending: false });
       if (data) {
         if (BAinfo.username && BAinfo.player_job) {
           const player = {
             username: BAinfo.username,
             player_job: BAinfo.player_job,
+            id: BAinfo.id,
           };
           setCurrentPlayer(player);
         }
@@ -61,13 +82,20 @@ export default function BAHistory() {
 
   useEffect(() => {
     getData();
-  }, [getData]);
+    getProfile();
+  }, [getData, getProfile]);
 
   return (
     <div className={styles.container}>
       <SideMenu />
       {showModal ? (
-        <BAModal setShowModal={setShowModal} getData={getData} />
+        <BAModal
+          currentPlayer={currentPlayer}
+          setShowModal={setShowModal}
+          getData={getData}
+          setBAInfo={setBAInfo}
+          BAInfo={BAInfo}
+        />
       ) : null}
       <div className={styles.BAContainer}>
         <div className={styles.dashHeader}>
@@ -81,7 +109,20 @@ export default function BAHistory() {
         </div>
         <div className={styles.BADetails}>
           <div className={styles.BAList}>
-            <button className={styles.newBtn} onClick={handleAddBA}>
+            <button
+              className={
+                profile?.username !== currentUsername
+                  ? `${styles.newBtn} ${styles.disabled}`
+                  : `${styles.newBtn}`
+              }
+              onClick={handleAddBA}
+              disabled={profile?.username !== currentUsername}
+              title={
+                profile?.username !== currentUsername
+                  ? "You cannot edit another user's BA"
+                  : "Add a new BA entry"
+              }
+            >
               New +
             </button>
             {/* map over dates */}

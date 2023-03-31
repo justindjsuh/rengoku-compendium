@@ -8,6 +8,7 @@ type BA = Database["public"]["Tables"]["ba_history"]["Row"][];
 interface Single_User {
   username: string;
   player_job: string;
+  id: number;
 }
 interface BA_Props {
   BAInfo: BA;
@@ -24,6 +25,7 @@ export const BASingle: React.FC<BA_Props> = ({ BAInfo, currentPlayer }) => {
               {currentPlayer.username} <span>({currentPlayer.player_job})</span>
             </p>
             <div className={styles.timer}>
+              <p>{ba.date} | </p>
               <FontAwesomeIcon
                 icon={faStopwatch}
                 size="lg"

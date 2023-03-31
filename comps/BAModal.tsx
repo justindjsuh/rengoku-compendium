@@ -1,28 +1,33 @@
 import { supabase } from "@/lib/supabaseClient";
 import styles from "@/styles/ModalBA.module.css";
+import { Database } from "@/types/supabase";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { SetStateAction, useState } from "react";
 
-const jobList = [
-  "Player Job",
-  "Adele",
-  "Bishop",
-  "Dawn Warrior",
-  "I/L",
-  "Kain",
-  "Shadower",
-];
+type BA = Database["public"]["Tables"]["ba_history"]["Row"][];
+interface Single_User {
+  username: string;
+  player_job: string;
+  id: number;
+}
 
 interface BAModal_Props {
   setShowModal: React.Dispatch<SetStateAction<boolean>>;
+  setBAInfo: React.Dispatch<SetStateAction<BA>>;
   getData: () => void;
+  currentPlayer: Single_User;
+  BAInfo: BA;
 }
 
-export const BAModal: React.FC<BAModal_Props> = ({ setShowModal, getData }) => {
+export const BAModal: React.FC<BAModal_Props> = ({
+  setShowModal,
+  setBAInfo,
+  getData,
+  currentPlayer,
+  BAInfo,
+}) => {
   const [date, setDate] = useState<string>("");
-  const [playerName, setPlayerName] = useState<string>("");
-  const [playerJob, setPlayerJob] = useState<string>("");
   const [time, setTime] = useState<string>("");
   const [damage, setDamage] = useState<string>("");
   const [ied, setIED] = useState<string>("");
@@ -34,57 +39,45 @@ export const BAModal: React.FC<BAModal_Props> = ({ setShowModal, getData }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const range = `${lowerRange} ~ ${upperRange}`;
-
-    const { data, error } = await supabase
+    const res = await supabase
       .from("ba_history")
-      .select("*")
-      .eq("date", date)
-      .single();
-    if (data) {
-      const reqObj = {
-        ba_id: data.id,
-        player_name: playerName,
-        player_job: playerJob,
+      .insert({
+        date,
         time,
         damage,
         ied,
         boss_dmg: bossPercent,
         main_stat: mainStat,
+        user_id: currentPlayer.id,
+        player_name: currentPlayer.username,
         range,
-      };
-      const res = await supabase.from("ba").insert(reqObj).select("*");
-    } else {
+      })
+      .select();
+
+    if (res.data) {
       const { data, error } = await supabase
         .from("ba_history")
-        .insert({
-          date,
-        })
-        .select();
-
+        .select("*")
+        .eq("player_name", currentPlayer.username)
+        .order("date", { ascending: false });
       if (data) {
-        const reqObj = {
-          ba_id: data[0].id,
-          player_name: playerName,
-          player_job: playerJob,
-          time,
-          damage,
-          ied,
-          boss_dmg: bossPercent,
-          main_stat: mainStat,
-          range,
-        };
-        const res = await supabase.from("ba").insert(reqObj).select("*");
+        const newData = [...BAInfo, ...res.data];
+        setBAInfo(newData);
       }
     }
     setShowModal(false);
-    getData();
   };
 
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modal}>
         <div className={styles.modalHeader}>
-          <p>Battle Analysis Entry</p>
+          <div className={styles.playerInfo}>
+            <p>
+              {currentPlayer.username} <span>({currentPlayer.player_job})</span>
+            </p>
+            <p>Battle Analysis Entry</p>
+          </div>
           <FontAwesomeIcon
             onClick={() => setShowModal(false)}
             icon={faXmark}
@@ -101,25 +94,6 @@ export const BAModal: React.FC<BAModal_Props> = ({ setShowModal, getData }) => {
                 className={styles.date}
                 onChange={(e) => setDate(e.target.value)}
               />
-              <input
-                type="text"
-                placeholder="Player Name"
-                onChange={(e) => setPlayerName(e.target.value)}
-              />
-            </div>
-            <div>
-              {/* <input
-                type="text"
-                placeholder="Player Job"
-                onChange={(e) => setPlayerJob(e.target.value)}
-              /> */}
-              <select onChange={(e) => setPlayerJob(e.target.value)}>
-                {jobList.map((job, idx) => (
-                  <option key={idx} value={job}>
-                    {job}
-                  </option>
-                ))}
-              </select>
               <input
                 type="text"
                 placeholder="Time"

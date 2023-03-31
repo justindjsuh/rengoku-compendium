@@ -81,6 +81,7 @@
 .BAList .disabled {
   background-color: #3e3e3e;
   cursor: default;
+  pointer-events: auto;
 }
 
 .BAList .disabled:hover {

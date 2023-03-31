@@ -19,8 +19,12 @@ interface Single_User {
 }
 
 export default function BAHistory() {
-  const [profile, setProfile] = useState<{ username: string } | null>({
+  const [profile, setProfile] = useState<{
+    username: string;
+    isAdmin: boolean;
+  } | null>({
     username: "",
+    isAdmin: false,
   });
   const [userList, setUserList] = useState<User_List | []>([]);
   const [BAInfo, setBAInfo] = useState<BA | []>([]);
@@ -37,7 +41,7 @@ export default function BAHistory() {
   const getProfile = useCallback(async () => {
     const { data, error } = await supabase
       .from("users")
-      .select("username")
+      .select("username, isAdmin")
       .eq("auth_id", user?.id)
       .single();
     setProfile(data);
@@ -111,12 +115,14 @@ export default function BAHistory() {
           <div className={styles.BAList}>
             <button
               className={
-                profile?.username !== currentUsername
+                profile?.username !== currentUsername && !profile?.isAdmin
                   ? `${styles.newBtn} ${styles.disabled}`
                   : `${styles.newBtn}`
               }
               onClick={handleAddBA}
-              disabled={profile?.username !== currentUsername}
+              disabled={
+                profile?.username !== currentUsername && !profile?.isAdmin
+              }
               title={
                 profile?.username !== currentUsername
                   ? "You cannot edit another user's BA"

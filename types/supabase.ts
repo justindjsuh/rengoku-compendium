@@ -9,62 +9,45 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
-      ba: {
+      ba_history: {
         Row: {
-          ba_id: number
           boss_dmg: string | null
           created_at: string | null
           damage: string | null
+          date: string
           id: number
           ied: string | null
           main_stat: string | null
-          player_job: string | null
-          player_name: string
+          player_name: string | null
           range: string | null
-          time: string | null
+          time: string
+          user_id: number
         }
         Insert: {
-          ba_id: number
           boss_dmg?: string | null
           created_at?: string | null
           damage?: string | null
+          date: string
           id?: number
           ied?: string | null
           main_stat?: string | null
-          player_job?: string | null
-          player_name: string
+          player_name?: string | null
           range?: string | null
-          time?: string | null
+          time?: string
+          user_id: number
         }
         Update: {
-          ba_id?: number
           boss_dmg?: string | null
           created_at?: string | null
           damage?: string | null
-          id?: number
-          ied?: string | null
-          main_stat?: string | null
-          player_job?: string | null
-          player_name?: string
-          range?: string | null
-          time?: string | null
-        }
-      }
-      ba_history: {
-        Row: {
-          created_at: string | null
-          date: string
-          id: number
-        }
-        Insert: {
-          created_at?: string | null
-          date: string
-          id?: number
-        }
-        Update: {
-          created_at?: string | null
           date?: string
           id?: number
+          ied?: string | null
+          main_stat?: string | null
+          player_name?: string | null
+          range?: string | null
+          time?: string
+          user_id?: number
         }
       }
       events: {
@@ -96,6 +79,7 @@ export interface Database {
           email: string
           id: number
           isAdmin: boolean
+          player_job: string | null
           username: string
         }
         Insert: {
@@ -106,6 +90,7 @@ export interface Database {
           email: string
           id?: number
           isAdmin?: boolean
+          player_job?: string | null
           username: string
         }
         Update: {
@@ -116,6 +101,7 @@ export interface Database {
           email?: string
           id?: number
           isAdmin?: boolean
+          player_job?: string | null
           username?: string
         }
       }

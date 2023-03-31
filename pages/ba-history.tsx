@@ -115,16 +115,22 @@ export default function BAHistory() {
           <div className={styles.BAList}>
             <button
               className={
-                profile?.username !== currentUsername && !profile?.isAdmin
+                currentUsername === ""
+                  ? `${styles.newBtn} ${styles.disabled}`
+                  : profile?.username !== currentUsername && !profile?.isAdmin
                   ? `${styles.newBtn} ${styles.disabled}`
                   : `${styles.newBtn}`
               }
               onClick={handleAddBA}
               disabled={
-                profile?.username !== currentUsername && !profile?.isAdmin
+                currentUsername === ""
+                  ? true
+                  : profile?.username !== currentUsername && !profile?.isAdmin
               }
               title={
-                profile?.username !== currentUsername
+                currentUsername === ""
+                  ? "Select a user"
+                  : profile?.username !== currentUsername && !profile?.isAdmin
                   ? "You cannot edit another user's BA"
                   : "Add a new BA entry"
               }

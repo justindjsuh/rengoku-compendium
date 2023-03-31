@@ -62,6 +62,19 @@
   cursor: pointer;
 }
 
+.login_form select {
+  background-color: #161616;
+  padding: 1rem 2rem;
+  font-size: 18px;
+  border-radius: 10px;
+  color: #757575;
+  border: 1px solid #242628;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 100%;
+}
+
 .navigator {
   display: flex;
   gap: 0.5rem;

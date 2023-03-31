@@ -8,9 +8,62 @@ import { PostgrestSingleResponse } from "@supabase/supabase-js";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
+const jobList = [
+  "Player Job",
+  "F/P",
+  "Corsair",
+  "Blaster",
+  "Cadena",
+  "I/L",
+  "Kinesis",
+  "Night Walker",
+  "Dawn Warrior",
+  "Shadower",
+  "Hero",
+  "Bowmaster",
+  "Buccaneer",
+  "Adele",
+  "Pathfinder",
+  "Wild Hunter",
+  "Night Lord",
+  "Aran",
+  "Marksman",
+  "Ho Young",
+  "Angelic Buster",
+  "Evan",
+  "Paladin",
+  "Viper",
+  "Illium",
+  "Mercedes",
+  "Battle Mage",
+  "Demon Slayer",
+  "Bishop",
+  "Xenon",
+  "Dark Knight",
+  "Demon Avenger",
+  "Cannon Master",
+  "Kaiser",
+  "Kain",
+  "Ark",
+  "Shade",
+  "Luminous",
+  "Dual Blade",
+  "Mechanic",
+  "Blaze Wizard",
+  "Zero",
+  "Wind Archer",
+  "Mihile",
+  "Lara",
+  "Phantom",
+  "Beast Taamer",
+  "Kanna",
+  "Hayato",
+];
+
 export default function Signup() {
   const [email, setEmail] = useState<string>("");
   const [username, setUsername] = useState<string>("");
+  const [playerJob, setPlayerJob] = useState<string>("");
   const [discord, setDiscord] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [usernameTaken, setUsernameTaken] = useState<boolean>(false);
@@ -69,6 +122,7 @@ export default function Signup() {
           auth_id: data.user?.id,
           email: data.user?.email,
           username,
+          player_job: playerJob,
           discord,
         });
         if (error) {
@@ -120,6 +174,21 @@ export default function Signup() {
               placeholder="Maplestory IGN"
               onChange={(e) => setUsername(e.target.value)}
             />
+            <select
+              onChange={(e) => setPlayerJob(e.target.value)}
+              defaultValue="Player Job"
+            >
+              {jobList.sort().map((job, idx) => (
+                <option
+                  key={idx}
+                  value={job}
+                  disabled={job === "Player Job" ? true : false}
+                  hidden={job === "Player Job" ? true : false}
+                >
+                  {job}
+                </option>
+              ))}
+            </select>
             <input
               type="text"
               placeholder="Discord"

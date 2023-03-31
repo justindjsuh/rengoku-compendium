@@ -33,7 +33,7 @@
   border-radius: 10px;
 }
 
-.dateList {
+.BAList {
   height: 850px; /* need to setup media query */
   display: flex;
   flex-direction: column;
@@ -45,19 +45,19 @@
   overflow-y: auto;
 }
 
-.dateList::-webkit-scrollbar {
+.BAList::-webkit-scrollbar {
   width: 10px;
 }
 
-.dateList::-webkit-scrollbar-track {
+.BAList::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.dateList::-webkit-scrollbar-thumb {
+.BAList::-webkit-scrollbar-thumb {
   background: #3e3e3e;
 }
 
-.dateList button {
+.BAList button {
   outline: none;
   background-color: transparent;
   border: none;
@@ -70,19 +70,19 @@
   border-radius: 5px;
 }
 
-.dateList .newBtn {
+.BAList .newBtn {
   background-color: #c3171d;
 }
 
-.dateList button:last-child {
+.BAList button:last-child {
   border-bottom: 1px solid #3e3e3e;
 }
 
-.dateList button:hover {
+.BAList button:hover {
   background-color: #3e3e3e;
 }
 
-.dateList .active {
+.BAList .active {
   background-color: #3e3e3e;
 }
 

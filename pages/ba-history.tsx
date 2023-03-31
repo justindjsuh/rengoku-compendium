@@ -8,51 +8,44 @@ import { supabase } from "../lib/supabaseClient";
 import { Database } from "../types/supabase";
 
 type BA = Database["public"]["Tables"]["ba_history"]["Row"][];
+type User_List = Database["public"]["Tables"]["users"]["Row"][];
+type User = Database["public"]["Tables"]["users"]["Row"];
 
-type BA_Single = {
-  ba_id: number;
-  boss_dmg: string | null;
-  created_at: string | null;
-  damage: string | null;
-  id: number;
-  ied: string | null;
-  main_stat: string | null;
-  player_job: string | null;
-  player_name: string;
-  range: string | null;
-  time: string | null;
-};
-
-type BA_History = {
-  created_at: string | null;
-  date: string;
-  id: number;
-  ba?: BA_Single[];
-};
+interface Single_User {
+  username: string;
+  player_job: string;
+}
 
 export default function BAHistory() {
-  const [dateList, setDateList] = useState<BA | []>([]);
-  const [BAInfo, setBAInfo] = useState<BA_Single[] | []>([]);
+  const [userList, setUserList] = useState<User_List | []>([]);
+  const [BAInfo, setBAInfo] = useState<BA | []>([]);
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [currentDate, setCurrentDate] = useState<string>("");
+  const [currentPlayer, setCurrentPlayer] = useState<Single_User | {}>({});
+  const [currentUsername, setCurrentUsername] = useState<string>("");
 
-  const handleDateClick = (BAinfo: BA_History) => {
-    if (BAinfo.ba) {
-      setBAInfo(BAinfo.ba);
-      setCurrentDate(BAinfo.date);
+  const handleUsernameClick = async (BAinfo: User) => {
+    if (BAinfo) {
+      const { data, error } = await supabase
+        .from("ba_history")
+        .select("*")
+        .eq("player_name", BAinfo.username);
+      if (data) {
+        const player = {
+          username: BAinfo.username,
+          player_job: BAinfo.player_job,
+        };
+        setBAInfo(data);
+        setCurrentPlayer(player);
+        setCurrentUsername(BAinfo.username);
+      }
     }
   };
 
   const getData = useCallback(async () => {
-    const { data, error } = await supabase
-      .from("ba_history")
-      .select(
-        "*, ba(ba_id, boss_dmg, damage, id, ied, main_stat, player_job, player_name, range, time)"
-      )
-      .order("date", { ascending: false });
+    const { data, error } = await supabase.from("users").select("*");
     if (data) {
       if (data.length > 0) {
-        setDateList(data);
+        setUserList(data);
       }
     }
   }, []);
@@ -82,31 +75,32 @@ export default function BAHistory() {
           />
         </div>
         <div className={styles.BADetails}>
-          <div className={styles.dateList}>
+          <div className={styles.BAList}>
             <button className={styles.newBtn} onClick={handleAddBA}>
               New +
             </button>
             {/* map over dates */}
-            {dateList.map((date, idx) => {
+            {userList.map((user, idx) => {
               return (
                 <button
                   className={
-                    currentDate === date.date ? `${styles.active}` : ""
+                    currentUsername === user.username ? `${styles.active}` : ""
                   }
                   key={idx}
-                  onClick={() => handleDateClick(date)}
+                  onClick={() => handleUsernameClick(user)}
                 >
-                  {date.date}
+                  {user.username}
                 </button>
               );
             })}
           </div>
           <div className={styles.details}>
-            {/* map over people who were in the BA */}
             {BAInfo.length > 0 ? (
-              <BASingle BAInfo={[...BAInfo]} />
+              <BASingle test={currentPlayer} BAInfo={[...BAInfo]} />
+            ) : currentUsername ? (
+              <p>This user currently has no BA history</p>
             ) : (
-              <p>Select a date to see details</p>
+              <p>Select a user to see details</p>
             )}
           </div>
         </div>

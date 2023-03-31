@@ -1,33 +1,27 @@
 import styles from "@/styles/BASingle.module.css";
 import { faStopwatch } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Database } from "../types/supabase";
 
-type BA_Single = {
-  ba_id: number;
-  boss_dmg: string | null;
-  created_at: string | null;
-  damage: string | null;
-  id: number;
-  ied: string | null;
-  main_stat: string | null;
+type BA = Database["public"]["Tables"]["ba_history"]["Row"][];
+
+interface Single_User {
+  username: string | null;
   player_job: string | null;
-  player_name: string;
-  range: string | null;
-  time: string | null;
-};
-
+}
 interface BA_Props {
-  BAInfo: BA_Single[];
+  BAInfo: BA;
+  test: Single_User | {};
 }
 
-export const BASingle: React.FC<BA_Props> = ({ BAInfo }) => {
+export const BASingle: React.FC<BA_Props> = ({ BAInfo, test }) => {
   return (
     <div className={styles.baSingleContainer}>
       {BAInfo.map((ba, idx) => (
         <div key={idx} className={styles.singleBAContainer}>
           <div className={styles.BAHeader}>
             <p>
-              {ba.player_name} <span>({ba.player_job})</span>
+              {ba.player_name} <span>(Player Job)</span>
             </p>
             <div className={styles.timer}>
               <FontAwesomeIcon

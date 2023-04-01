@@ -9,6 +9,8 @@ import {
 } from "react";
 import styles from "@/styles/BossDetails.module.css";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
 
 type Boss_Details = Database["public"]["Tables"]["bosses"]["Row"];
 type Boss_Difficulties =
@@ -94,6 +96,13 @@ export const BossDetails: React.FC<Boss_Props> = ({
         </div>
       </div>
       <div className={styles.clears}>
+        <button className={styles.addBtn}>
+          <FontAwesomeIcon
+            icon={faPlus}
+            size="lg"
+            style={{ color: "#e8e8e8" }}
+          />
+        </button>
         {clearHistory ? (
           clearHistory[btnIndex]?.length === 0 ? (
             <p className={styles.detailsEmpty}>No clears recorded yet</p>

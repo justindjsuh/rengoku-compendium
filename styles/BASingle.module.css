@@ -19,6 +19,7 @@
 
 .baSingleContainer::-webkit-scrollbar-thumb {
   background: #3e3e3e;
+  border-radius: 10px;
 }
 
 .singleBAContainer {

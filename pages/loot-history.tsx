@@ -4,6 +4,7 @@ import styles from "@/styles/LootHistory.module.css";
 import { Database } from "@/types/supabase";
 import Image from "next/image";
 import { useState, useEffect } from "react";
+import { BossDetails } from "../comps/BossDetails";
 
 type Boss_List = Database["public"]["Tables"]["bosses"]["Row"][];
 type Boss = Database["public"]["Tables"]["bosses"]["Row"];
@@ -11,11 +12,18 @@ type Boss = Database["public"]["Tables"]["bosses"]["Row"];
 export default function LootHistory() {
   const [bossList, setBossList] = useState<Boss_List | []>([]);
   const [selectedBoss, setSelectedBoss] = useState<string>("");
-  const [currentBossDetails, setCurrentBossDetails] = useState<Boss | {}>({});
+  const [btnIndex, setBtnIndex] = useState<number>(0);
+  const [currentBossDetails, setCurrentBossDetails] = useState<Boss>({
+    id: 0,
+    name: "",
+    banner: "",
+    order: 0,
+  });
 
   const handleBossClick = (bossName: Boss) => {
     setSelectedBoss(bossName.name);
     setCurrentBossDetails(bossName);
+    setBtnIndex(0);
   };
 
   const getBosses = async () => {
@@ -63,13 +71,17 @@ export default function LootHistory() {
             })}
           </div>
           <div className={styles.details}>
-            {/* {BAInfo.length > 0 ? (
-              <BASingle currentPlayer={currentPlayer} BAInfo={[...BAInfo]} />
-            ) : currentUsername ? (
-              <p>This user currently has no BA history</p>
+            {selectedBoss ? (
+              <BossDetails
+                currentBossDetails={currentBossDetails}
+                btnIndex={btnIndex}
+                setBtnIndex={setBtnIndex}
+              />
             ) : (
-              <p>Select a user to see details</p>
-            )} */}
+              <p className={styles.detailsEmpty}>
+                Select a boss to see details
+              </p>
+            )}
           </div>
         </div>
       </div>

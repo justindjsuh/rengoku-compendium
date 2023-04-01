@@ -9,6 +9,12 @@ const nextConfig = {
         port: "",
         pathname: "/Character/**",
       },
+      {
+        protocol: "https",
+        hostname: "kssttwnhskxxdczpoxvu.supabase.co",
+        port: "",
+        pathname: "/storage/v1/object/public/boss-banners/**",
+      },
     ],
   },
 };

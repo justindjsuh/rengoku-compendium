@@ -49,7 +49,7 @@ export const LootModal: React.FC<Modal_Props> = ({
       setGuildMembers(data);
     }
   };
-  console.log(guildMembers);
+
   const handleSubmit = () => {};
 
   useEffect(() => {

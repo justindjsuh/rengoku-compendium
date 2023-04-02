@@ -47,8 +47,6 @@ export default function BAHistory() {
     setProfile(data);
   }, [user?.id]);
 
-  console.log(profile);
-
   const handleUsernameClick = async (BAinfo: User) => {
     if (BAinfo) {
       const { data, error } = await supabase

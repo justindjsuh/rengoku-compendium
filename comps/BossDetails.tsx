@@ -11,6 +11,7 @@ import styles from "@/styles/BossDetails.module.css";
 import Image from "next/image";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { LootModal } from "./LootModal";
 
 type Boss_Details = Database["public"]["Tables"]["bosses"]["Row"];
 type Boss_Difficulties =
@@ -26,12 +27,16 @@ interface Boss_Props {
   currentBossDetails: Boss_Details;
   btnIndex: number;
   setBtnIndex: Dispatch<SetStateAction<number>>;
+  showModal: boolean;
+  setShowModal: Dispatch<SetStateAction<boolean>>;
 }
 
 export const BossDetails: React.FC<Boss_Props> = ({
   currentBossDetails,
   btnIndex,
   setBtnIndex,
+  showModal,
+  setShowModal,
 }) => {
   const [bossDifficulties, setBossDifficulties] = useState<
     Boss_Difficulties | []
@@ -43,7 +48,7 @@ export const BossDetails: React.FC<Boss_Props> = ({
     setCurrentDifficulty(difficulty);
     setBtnIndex(idx);
   };
-  console.log(btnIndex);
+
   const getBossDetails = useCallback(async () => {
     const { data, error } = await supabase
       .from("boss_difficulty")
@@ -96,13 +101,6 @@ export const BossDetails: React.FC<Boss_Props> = ({
         </div>
       </div>
       <div className={styles.clears}>
-        <button className={styles.addBtn}>
-          <FontAwesomeIcon
-            icon={faPlus}
-            size="lg"
-            style={{ color: "#e8e8e8" }}
-          />
-        </button>
         {clearHistory ? (
           clearHistory[btnIndex]?.length === 0 ? (
             <p className={styles.detailsEmpty}>No clears recorded yet</p>
@@ -131,6 +129,13 @@ export const BossDetails: React.FC<Boss_Props> = ({
             ))
           : null}
       </div>
+      {showModal ? (
+        <LootModal
+          setShowModal={setShowModal}
+          currentBossDetails={currentBossDetails}
+          currentDifficulty={currentDifficulty}
+        />
+      ) : null}
     </div>
   );
 };

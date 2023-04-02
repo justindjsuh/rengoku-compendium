@@ -55,25 +55,6 @@
   font-size: 32px;
 }
 
-.addBtn {
-  position: fixed;
-  bottom: 10%;
-  right: 5%;
-  background-color: #750e12;
-  outline: none;
-  border: none;
-  color: #e8e8e8;
-  font-size: 20px;
-  font-weight: 500;
-  padding: 1.5rem;
-  border-radius: 50%;
-  cursor: pointer;
-}
-
-.addBtn:hover {
-  background-color: #5c0b0e;
-}
-
 .clears {
   position: relative;
   display: flex;
